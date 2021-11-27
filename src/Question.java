@@ -19,13 +19,13 @@ public class Question extends JFrame {
     JLabel pontos;
 
     int num;
-    String [][] atualLista = new String[10][];
+    public int[] numArray = new int[4];
+    String [][] atualLista = new String[20][];
 
 
     public Question() {
         inicialize();
         setVisible(true);
-//        setLocationRelativeTo(null);
         setTitle("Trivia");
         setResizable(false);
     }
@@ -51,23 +51,23 @@ public class Question extends JFrame {
         background.setBackground(new Color(0,0,0));
 
         // Aqui as perguntas e respostas são sorteadas e impressas na tela.
-        if (Bank.contagem < 9) {
+        if (Bank.contagem < 10) {
             atualLista = Bank.listaNUm;
-        } else if (Bank.contagem < 18){
+        } else if (Bank.contagem < 20){
             atualLista = Bank.listaNDois;
         } else {
             atualLista = Bank.listaNTres;
         }
 
 
-        num = new Random().nextInt(9);
+        num = new Random().nextInt(19);
 
         while (true) {
             int sorteado = 0;
             for (int c = 0; c < Bank.arr.length; c++) {
                 if (atualLista[num][0].equals(Bank.arr[c])) {
                     sorteado++;
-                    num = new Random().nextInt(9);
+                    num = new Random().nextInt(19);
                 }
             }
             if (sorteado == 0) {
@@ -82,11 +82,16 @@ public class Question extends JFrame {
         answers.add(answerC);
         answers.add(answerD);
 
+        // Ordem aleatória das opções de resposta
+
         question.setText("<html>" + atualLista[num][1] + "</html>");
-        answerA.setText(atualLista[num][2]);
-        answerB.setText(atualLista[num][3]);
-        answerC.setText(atualLista[num][4]);
-        answerD.setText(atualLista[num][5]);
+
+        answerA.setText(atualLista[num][attAnswers(numArray)]);
+        answerB.setText(atualLista[num][attAnswers(numArray)]);
+        answerC.setText(atualLista[num][attAnswers(numArray)]);
+        answerD.setText(atualLista[num][attAnswers(numArray)]);
+
+
 
         answerA.setBackground(new Color(0,0,0));
         answerA.setFocusable(false);
@@ -311,6 +316,28 @@ public class Question extends JFrame {
             Bank.contagem = 0;
         }
 
+    }
+
+    public static int contagem = 0;
+    public static int attAnswers(int[] numArray){
+        if (contagem == 3) contagem = 0;
+        int n = new Random().nextInt((5 - 2) + 1) +2;
+
+        while (true) {
+            int sorteado = 0;
+            for (int c = 0; c < numArray.length; c++) {
+                if (n == numArray[c]) {
+                    sorteado++;
+                    n = new Random().nextInt((5 - 2) + 1) +2;
+                }
+            }
+            if (sorteado == 0) {
+                break;
+            }
+        }
+        numArray[contagem] = n;
+        contagem ++;
+        return n;
     }
 
 }
